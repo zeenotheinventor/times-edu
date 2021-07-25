@@ -1,8 +1,10 @@
-import { Field } from "type-graphql";
-import { BaseEntity, Column, PrimaryColumn } from "typeorm";
+import { Field, ObjectType } from "type-graphql";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
+@ObjectType()
+@Entity()
 export class Institution extends BaseEntity {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn("uuid")
   @Field()
   id: string;
 
