@@ -31,3 +31,9 @@ mutation($update: UpdateInstitutionInput!, $id: String!) {
   }
 }
 `;
+
+export const deleteInstitutionDocument: string = `
+mutation($id: String!) {
+  deleteInstitution(id: $id)
+}
+`;

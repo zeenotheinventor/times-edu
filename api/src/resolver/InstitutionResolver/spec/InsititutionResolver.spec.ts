@@ -3,6 +3,7 @@ import { Connection } from "typeorm";
 import { CreateInstitutionInput } from "../types";
 import {
   createInstitutionDocument,
+  deleteInstitutionDocument,
   getInstitutionsDocument,
   updateInstitutionDocument,
 } from "./InstitutionDocuments";
@@ -112,6 +113,28 @@ describe("Institution Resolver", () => {
   });
 
   it("deletes an institution", async () => {
-    expect(response).toEqual(expectedResponse);
+    const createInstitutionResponse: ExecutionResult =
+      await createInstitution();
+    await createInstitution();
+
+    const institutionId: string =
+      createInstitutionResponse.data?.createInstitution?.id;
+
+    const deleteInstitutionResponse: ExecutionResult = await fireGraphQLCall(
+      deleteInstitutionDocument,
+      { id: institutionId }
+    );
+
+    expect(deleteInstitutionResponse.errors).toBeUndefined();
+
+    const expectedResponse = {
+      data: {
+        deleteInstitution: true,
+      },
+    };
+    expect(deleteInstitutionResponse).toEqual(expectedResponse);
+
+    const deletedInstitution = await Institution.findOne({ id: institutionId });
+    expect(deletedInstitution).not.toBeDefined();
   });
 });
