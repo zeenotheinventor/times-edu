@@ -1,8 +1,13 @@
 import { createTestConnection, fireGraphQLCall } from "../../../testUtils";
 import { Connection } from "typeorm";
 import { CreateInstitutionInput } from "../types";
-import { createInstitutionDocument } from "./InstitutionDocuments";
+import {
+  createInstitutionDocument,
+  getInstitutionsDocument,
+  updateInstitutionDocument,
+} from "./InstitutionDocuments";
 import { Institution } from "../../../entity";
+import { ExecutionResult } from "graphql";
 
 describe("Institution Resolver", () => {
   let conn: Connection;
@@ -37,23 +42,72 @@ describe("Institution Resolver", () => {
       region: "EU",
     };
 
-    const expectedResponse = {
-      data: {
-        createInstitution: institution,
-      },
-    };
-
-    expect(response).toEqual(expectedResponse);
+    expect(response.errors).toBeUndefined();
+    expect(response.data?.createInstitution).toEqual(
+      expect.objectContaining(institution)
+    );
 
     const createdInstitution = await Institution.findOne(institution);
     expect(createdInstitution).toEqual(expect.objectContaining(institution));
   });
 
   it("retrieves all institutions", async () => {
+    await conn.close();
+
+    conn = await createTestConnection();
     await createInstitution();
+
+    const response: ExecutionResult = await fireGraphQLCall(
+      getInstitutionsDocument
+    );
+
+    const expectedResponse: ExecutionResult = {
+      data: {
+        institutions: [
+          {
+            name: "University of Surrey",
+            address: "Stag Hill, University Campus, Guildford GU2 7XH",
+            country: "The United Kingdom",
+            region: "EU",
+          },
+        ],
+      },
+    };
+
+    expect(response.errors).toBeUndefined();
+    expect(response).toEqual(expectedResponse);
   });
 
   it("updates an institution", async () => {
+    const createInstitutionResponse: ExecutionResult =
+      await createInstitution();
+
+    const institution = {
+      name: "Batman College of Sneakery",
+      address: "Stag Hill, University Campus, Guildford GU2 7XH",
+      country: "The United Kingdom",
+      region: "EU",
+    };
+
+    const expectedResponse: ExecutionResult = {
+      data: {
+        updateInstitution: institution,
+      },
+    };
+
+    const id: string = createInstitutionResponse.data?.createInstitution?.id;
+
+    const response: ExecutionResult = await fireGraphQLCall(
+      updateInstitutionDocument,
+      { id, update: { name: "Batman College of Sneakery" } }
+    );
+
+    const updatedInstitution = await Institution.findOne({
+      name: "Batman College of Sneakery",
+    });
+
+    expect(response.errors).toBeUndefined();
+    expect(updatedInstitution).toEqual(expect.objectContaining(institution));
     expect(response).toEqual(expectedResponse);
   });
 

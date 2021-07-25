@@ -1,6 +1,7 @@
 export const createInstitutionDocument: string = `
 mutation($input: CreateInstitutionInput!) {
     createInstitution(input: $input) {
+      id
       name
       address
       country
@@ -12,6 +13,17 @@ mutation($input: CreateInstitutionInput!) {
 export const getInstitutionsDocument: string = `
 query {
   institutions {
+    name
+    address
+    country
+    region
+  }
+}
+`;
+
+export const updateInstitutionDocument: string = `
+mutation($update: UpdateInstitutionInput!, $id: String!) {
+  updateInstitution(update: $update, id: $id) {
     name
     address
     country

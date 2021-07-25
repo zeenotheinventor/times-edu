@@ -20,8 +20,16 @@ type Institution {
 
 type Mutation {
   createInstitution(input: CreateInstitutionInput!): Institution!
+  updateInstitution(update: UpdateInstitutionInput!, id: String!): Institution!
 }
 
 type Query {
   institutions: [Institution!]!
+}
+
+input UpdateInstitutionInput {
+  name: String
+  address: String
+  country: String
+  region: String
 }
