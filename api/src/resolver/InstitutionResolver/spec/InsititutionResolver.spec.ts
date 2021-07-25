@@ -48,8 +48,8 @@ describe("Institution Resolver", () => {
       expect.objectContaining(institution)
     );
 
-    const createdInstitution = await Institution.findOne(institution);
-    expect(createdInstitution).toEqual(expect.objectContaining(institution));
+    const databaseResult = await Institution.findOne(institution);
+    expect(databaseResult).toEqual(expect.objectContaining(institution));
   });
 
   it("retrieves all institutions", async () => {
@@ -103,12 +103,12 @@ describe("Institution Resolver", () => {
       { id, update: { name: "Batman College of Sneakery" } }
     );
 
-    const updatedInstitution = await Institution.findOne({
+    const databaseResult = await Institution.findOne({
       name: "Batman College of Sneakery",
     });
 
     expect(response.errors).toBeUndefined();
-    expect(updatedInstitution).toEqual(expect.objectContaining(institution));
+    expect(databaseResult).toEqual(expect.objectContaining(institution));
     expect(response).toEqual(expectedResponse);
   });
 
@@ -132,9 +132,10 @@ describe("Institution Resolver", () => {
         deleteInstitution: true,
       },
     };
+
     expect(deleteInstitutionResponse).toEqual(expectedResponse);
 
-    const deletedInstitution = await Institution.findOne({ id: institutionId });
-    expect(deletedInstitution).not.toBeDefined();
+    const databaseResult = await Institution.findOne({ id: institutionId });
+    expect(databaseResult).not.toBeDefined();
   });
 });
