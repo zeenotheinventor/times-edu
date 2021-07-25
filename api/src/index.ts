@@ -3,7 +3,7 @@ import { createConnection, getConnectionOptions } from "typeorm";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
-import { InstitutionResolver } from "./resolvers";
+import { InstitutionResolver } from "./resolver";
 
 (async () => {
   const app = express();
