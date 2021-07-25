@@ -8,3 +8,14 @@ mutation($input: CreateInstitutionInput!) {
     }
   }
 `;
+
+export const getInstitutionsDocument: string = `
+query {
+  institutions {
+    name
+    address
+    country
+    region
+  }
+}
+`;

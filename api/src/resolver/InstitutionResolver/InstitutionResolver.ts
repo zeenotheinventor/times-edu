@@ -11,8 +11,8 @@ export class InstitutionResolver {
     return await Institution.create(input).save();
   }
 
-  @Query(() => String)
-  hello() {
-    return "hi!";
+  @Query(() => [Institution])
+  async institutions() {
+    return await Institution.find();
   }
 }
