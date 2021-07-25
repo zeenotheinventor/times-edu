@@ -21,6 +21,7 @@ type Institution {
 type Mutation {
   createInstitution(input: CreateInstitutionInput!): Institution!
   updateInstitution(update: UpdateInstitutionInput!, id: String!): Institution!
+  deleteInstitution(id: String!): Boolean!
 }
 
 type Query {

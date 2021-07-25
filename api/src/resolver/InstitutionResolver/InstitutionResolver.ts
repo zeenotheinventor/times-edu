@@ -24,4 +24,10 @@ export class InstitutionResolver {
     await Institution.update({ id }, update);
     return Institution.findOne(id);
   }
+
+  @Mutation(() => Boolean)
+  async deleteInstitution(@Arg("id", () => String) id: string) {
+    await Institution.delete({ id });
+    return true;
+  }
 }
