@@ -2,7 +2,7 @@ module.exports = [
   {
     name: "development",
     type: "sqlite",
-    database: "database.sqlite",
+    database: "database.dev.times-higher-education",
     synchronize: true,
     logging: true,
     entities: ["src/entity/**/*.ts"],
@@ -13,6 +13,15 @@ module.exports = [
       migrationsDir: "src/migration",
       subscribersDir: "src/subscriber"
     }
+  },
+  {
+    name: "test",
+    type: "sqlite",
+    database: "database.test.times-higher-education",
+    synchronize: true,
+    logging: false,
+    dropSchema: true,
+    entities: ["src/entity/**/*.ts"],
   },
   {
     name: "production",
